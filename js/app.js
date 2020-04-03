@@ -20,6 +20,7 @@
 
 const sections = document.querySelectorAll("section");
 const navbar = document.getElementById("navbar__list");
+const navItems = document.getElementsByClassName("menu__link");
 
 /**
  * End Global Variables
@@ -53,6 +54,7 @@ const isInViewport = (el) => {
  * 
 */
 
+
 // build the nav
 const buildNav = () => {
   for (const section of sections) {
@@ -68,10 +70,16 @@ const addActiveClass = (link, id) => {
     for (const section of sections) {
       section.classList.remove('your-active-class')
     }
+    for (const navItem of navItems) {
+      navItem.classList.remove('active')
+    }
     const selectedSection = document.getElementById(id.slice(1))
+    const selectedLink = document.querySelector(`a[href="${id}"]`);
     selectedSection.classList.add('your-active-class')
+    selectedLink.classList.add('active')
   }
 }
+    
 
 // Scroll to anchor ID using scrollTO event
 const scrollToSection = (id) => {
