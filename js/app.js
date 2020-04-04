@@ -19,17 +19,13 @@
 */
 
 const sections = document.querySelectorAll("section");
-const section = document.querySelector('section')
 const navbar = document.getElementById("navbar__list");
-const navItems = document.getElementsByClassName("menu__link");
 
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
-
-
 
 const createNavLi = (sectionId, navLabel) => {
   const newLi = document.createElement("li");
@@ -65,18 +61,21 @@ const buildNav = () => {
 }
 
 // Add class 'active' to section when near top of viewport
-const addActiveClass = (link, id) => {
-  if (isSectionInViewport(link)) {
-    for (const section of sections) {
-      section.classList.remove('your-active-class')
+const addActiveClass = () => {
+  for (const section of sections) {
+    // Subtract 250 so section and nav highlight at same time
+    const elPosition = section.offsetTop - 250;
+    const nextElPosition = section.nextElementSibling ? section.nextElementSibling.offsetTop -250 : null;
+    if ( elPosition < window.scrollY && (!section.nextElementSibling || (section.nextElementSibling && nextElPosition > window.scrollY))) {
+
+      // Add active state to nav
+      if (!document.querySelector(`[href="#${section.id}"`).classList.contains('active')) {
+        document.querySelector(`[href="#${section.id}"`).classList.add('active');
+      }
+    } else {
+      section.classList.remove('active');
+      document.querySelector(`[href="#${section.id}"`).classList.remove('active');
     }
-    for (const navItem of navItems) {
-      navItem.classList.remove('active')
-    }
-    const selectedSection = document.getElementById(id.slice(1))
-    const selectedLink = document.querySelector(`a[href="${id}"]`);
-    selectedSection.classList.add('your-active-class')
-    selectedLink.classList.add('active')
   }
 }
 
@@ -90,7 +89,6 @@ const scrollToSection = (id) => {
     behavior: 'smooth'
   });
 }
-
 
 /**
  * End Main Functions
@@ -106,13 +104,14 @@ for (link of document.querySelectorAll('.menu__link')) {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const id = e.target.getAttribute('href');
-    // Set sections as active
-    addActiveClass(link, id);
-    scrollToSection(id);
+    scrollToSection(id)
   });
 }
 
+// Set sections as active
 window.onscroll = () => {
+  addActiveClass()
+  // Highlight section in view
   for (const section of sections) {
     isSectionInViewport(section) ? section.classList.add('your-active-class') : section.classList.remove('your-active-class') 
   }
