@@ -37,10 +37,10 @@ const createNavLi = (sectionId, navLabel) => {
 }
   
 const isSectionInViewport = (el) => {
-  const rect = el.getBoundingClientRect();
+  const view = el.getBoundingClientRect();
   return (
-    rect.top >= 0 &&
-    rect.top <=
+    view.top >= 0 &&
+    view.top <=
      0.4 * (window.innerHeight || document.documentElement.clientHeight)
   )
 }
@@ -60,7 +60,8 @@ const buildNav = () => {
   }
 }
 
-// Add class 'active' to section when near top of viewport
+// Add class 'active' to navbar item when section is in viewport
+// used space between elements to determine section in view
 const addActiveClass = () => {
   for (const section of sections) {
     // Subtract 250 so section and nav highlight at same time
@@ -68,7 +69,7 @@ const addActiveClass = () => {
     const nextElPosition = section.nextElementSibling ? section.nextElementSibling.offsetTop -250 : null;
     if ( elPosition < window.scrollY && (!section.nextElementSibling || (section.nextElementSibling && nextElPosition > window.scrollY))) {
 
-      // Add active state to nav
+      // Add active to nav
       if (!document.querySelector(`[href="#${section.id}"`).classList.contains('active')) {
         document.querySelector(`[href="#${section.id}"`).classList.add('active');
       }
