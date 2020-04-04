@@ -19,6 +19,7 @@
 */
 
 const sections = document.querySelectorAll("section");
+const section = document.querySelector('section')
 const navbar = document.getElementById("navbar__list");
 const navItems = document.getElementsByClassName("menu__link");
 
@@ -28,32 +29,31 @@ const navItems = document.getElementsByClassName("menu__link");
  * 
 */
 
+
+
 const createNavLi = (sectionId, navLabel) => {
   const newLi = document.createElement("li");
   newLi.innerHTML = 
-    `<a href="#${sectionId}" class="menu__link">
-      ${navLabel}
-    </a>`;
+  `<a href="#${sectionId}" class="menu__link">
+  ${navLabel}
+  </a>`;
   return navbar.appendChild(newLi);
 }
-
-//Is Section in View - logic from https://vanillajstoolkit.com/helpers/isinviewport/
-const isInViewport = (el) => {
-  let distance = el.getBoundingClientRect();
-	return (
-		distance.top >= 0 &&
-		distance.left >= 0 &&
-		distance.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-		distance.right <= (window.innerWidth || document.documentElement.clientWidth)
-	);
-};
-
+  
+const isSectionInViewport = (el) => {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.top <=
+     0.4 * (window.innerHeight || document.documentElement.clientHeight)
+  )
+}
+    
 /**
  * End Helper Functions
  * Begin Main Functions
  * 
-*/
-
+ */
 
 // build the nav
 const buildNav = () => {
@@ -66,7 +66,7 @@ const buildNav = () => {
 
 // Add class 'active' to section when near top of viewport
 const addActiveClass = (link, id) => {
-  if (isInViewport(link)) {
+  if (isSectionInViewport(link)) {
     for (const section of sections) {
       section.classList.remove('your-active-class')
     }
@@ -79,23 +79,24 @@ const addActiveClass = (link, id) => {
     selectedLink.classList.add('active')
   }
 }
-    
 
 // Scroll to anchor ID using scrollTO event
+// Subtract 70 from location to see top of section in view
 const scrollToSection = (id) => {
   const location = document.querySelector(`${id}`).offsetTop;
   window.scrollTo({
-    top: location,
+    top: location - 70,
     left: 0,
     behavior: 'smooth'
   });
 }
 
+
 /**
  * End Main Functions
  * Begin Events
  * 
-*/
+ */
 
 // Build menu 
 buildNav();
@@ -111,5 +112,9 @@ for (link of document.querySelectorAll('.menu__link')) {
   });
 }
 
-
-
+window.onscroll = () => {
+  for (const section of sections) {
+    isSectionInViewport(section) ? section.classList.add('your-active-class') : section.classList.remove('your-active-class') 
+  }
+}
+    
