@@ -36,7 +36,7 @@ const createNavLi = (sectionId, navLabel) => {
   return navbar.appendChild(newLi);
 }
   
-const isSectionInViewport = (el) => {
+const isInViewport = (el) => {
   const view = el.getBoundingClientRect();
   return (
     view.top >= 0 &&
@@ -114,7 +114,7 @@ window.onscroll = () => {
   addActiveClass()
   // Highlight section in view
   for (const section of sections) {
-    isSectionInViewport(section) ? section.classList.add('your-active-class') : section.classList.remove('your-active-class') 
+    isInViewport(section) ? section.classList.add('your-active-class') : section.classList.remove('your-active-class') 
   }
 }
     
